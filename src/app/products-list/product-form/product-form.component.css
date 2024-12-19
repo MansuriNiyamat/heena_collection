@@ -1,0 +1,23 @@
+.container {
+ max-width: 90%;
+  margin: 20px auto;
+}
+
+mat-form-field {
+  width: 32.5%;
+ 
+}
+
+.item-row {
+ 
+  display: flex;
+  align-items: center;
+}
+
+button {
+  margin-top: 20px;
+}
+
+button mat-icon {
+  margin-right: 8px;
+}
