@@ -6,7 +6,9 @@ export interface product {
     grandTotal: number;
     items: item[];
     mobile?:string;
-}
+    created?:Date;
+    modified?: Date;
+    }
 
 export interface item {
     name?:string;

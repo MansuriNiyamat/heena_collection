@@ -1,56 +1,24 @@
 {
-  "products": [
+  "invoices": [
     {
+      "id": "1",
       "name": "Niyamat",
-      "description": "Test desc",
-      "saving": 778,
-      "grandTotal": 3112,
+      "description": "",
+      "saving": 258,
+      "grandTotal": 1032,
       "items": [
         {
-          "name": "Jorjat",
+          "name": "Suit",
           "qty": 1,
-          "size": "full",
-          "price": 1890,
-          "discount": 20,
-          "total": 1512
-        },
-        {
-          "name": "rihayat",
-          "qty": 2,
           "size": "",
-          "price": 1000,
+          "price": 1290,
           "discount": 20,
-          "total": 1600
+          "total": 1032
         }
       ],
       "mobile": "9909845530",
-      "id": "1"
-    },
-    {
-      "name": "",
-      "description": "",
-      "saving": 200,
-      "grandTotal": 800,
-      "items": [
-        {
-          "name": "",
-          "qty": 1,
-          "size": "",
-          "price": 1000,
-          "discount": 20,
-          "total": 800
-        },
-        {
-          "name": "",
-          "qty": 1,
-          "size": "",
-          "price": 0,
-          "discount": 10,
-          "total": 0
-        }
-      ],
-      "mobile": "",
-      "id": "2"
+      "created": "2024-12-20T06:56:36.845Z",
+      "modified": "2024-12-20T06:56:36.845Z"
     }
   ],
   "errors": []

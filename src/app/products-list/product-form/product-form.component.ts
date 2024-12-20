@@ -18,6 +18,7 @@ import {MatError, MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { ErrorLogsService } from '../../services/error-logs.service';
+import { timeout } from 'rxjs';
 @Component({
   selector: 'app-product-form',
   standalone: true,
@@ -36,6 +37,8 @@ export class ProductFormComponent {
   activeRoute: ActivatedRoute = inject(ActivatedRoute);
   saving = 0;
   total = 0;
+  qty = 0;
+  info = "";
   constructor() {
   
   }
@@ -66,18 +69,38 @@ export class ProductFormComponent {
     return (this.productForm.get('items') as FormArray);
   }
   addItem() {
-    const itemGroup = new FormGroup({
-      name: new FormControl(''),
-      qty: new FormControl(1, [Validators.required, Validators.min(1)]),
-      size: new FormControl(''),
-      price: new FormControl(0, [Validators.required, Validators.min(0)]),
-      discount: new FormControl(10, [Validators.required, Validators.min(0)]),
-      total: new FormControl(0, Validators.required),
-    });
-    this.items.push(itemGroup);
-    this.updateProductTotals();
+    if(this.validateItem()){
+      const itemGroup = new FormGroup({
+        name: new FormControl('Suit'),
+        qty: new FormControl(1, [Validators.required, Validators.min(1)]),
+        size: new FormControl(''),
+        price: new FormControl('', [Validators.required, Validators.min(0)]),
+        discount: new FormControl(10, [Validators.required, Validators.min(0)]),
+        total: new FormControl('', Validators.required),
+      });
+      this.items.push(itemGroup);
+      this.updateProductTotals();
+    } else {
+      return;
+    }
+
   }
 
+  validateItem(){
+    let flag = true
+    this.items.controls.forEach((itemGroup: any) => {
+      const qty = itemGroup.get('qty')?.value;
+      const price = itemGroup.get('price')?.value;
+      const discount = itemGroup.get('discount')?.value;
+      const total = itemGroup.get('total')?.value;
+      if(price == 0 || price < 0 || price == ''){
+        this.log.openSnackBar('Please select a price.')
+        flag =  false
+      }
+  
+    });
+    return flag;
+  }
   // Remove an item from the FormArray
   removeItem(index: number) {
     this.items.removeAt(index);
@@ -99,7 +122,7 @@ export class ProductFormComponent {
   updateProductTotals() {
     let grandTotal = 0;
     let totalSaving = 0;
-
+    let qtyt = 0;
     // Loop through all items and update the grandTotal and saving
     this.items.controls.forEach((itemGroup: any) => {
       const qty = itemGroup.get('qty')?.value;
@@ -114,17 +137,25 @@ export class ProductFormComponent {
       const saving = originalTotal - total;
 
       // Update grandTotal and saving
+      qtyt += qty;
       grandTotal += total;
       totalSaving += saving;
     });
+    this.qty = qtyt;
 this.saving = totalSaving;
 this.total = grandTotal;
+
+this.info = `Total: ${Math.floor(grandTotal)}  /  Saving: ${Math.floor(totalSaving)}   /   (QTY - ${qtyt})`;
+//this.info = `Total: ${this.total.toFixed(0)}  /  Saving: ${this.total.toFixed(0)}   /   (QTY - ${this.qty})`;
+
     // Update the form fields for grandTotal and saving
    // this.productForm.get('grandTotal')?.setValue(grandTotal);
    // this.productForm.get('saving')?.setValue(totalSaving);
   }
   reset(){
-    this.productForm.reset()
+    this.items.clear();
+    this.productForm.reset();
+    this.addItem();
   }
   onSubmit() {
     if (this.productForm.invalid) return;
@@ -137,23 +168,28 @@ this.total = grandTotal;
         grandTotal: this.total,
         items: prod.items,
         mobile:prod.mobile
+
       }
 
     if (this.isEdit && this.productId) {
       data.id = this.productId;
+      data.modified = new Date;
       this.productService
         .updateProduct(this.productId, data)
         .subscribe(() => {
         this.log.openSnackBar('Product Updated Sucessfully.')
-
-          this.router.navigate(['/']);
+          this.reset()
+         // this.router.navigate(['/']);
         });
     } else {
+      data.created = new Date;
+      data.modified = new Date;
       this.productService
         .createProduct(data)
         .subscribe(() => {
         this.log.openSnackBar('Product created Sucessfully.')
-          this.router.navigate(['/']);
+        this.reset()
+         // this.router.navigate(['/']);
         });
     }
   }

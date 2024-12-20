@@ -1,26 +1,26 @@
 
   <h3>
-    {{ isEdit ? "Edit" : "Create" }} Invoice
+    {{ isEdit ? "Edit" : "Create" }} Invoice <span class="sp">{{info}}</span>
   </h3>
   <h3>
-    {{"Total : "+ total  + " / Savings  " + saving }}
+    
   </h3>
   <div class="container">
     <form [formGroup]="productForm" >
       <!-- Product Form Fields -->
     
   
-      <mat-form-field>
+      <mat-form-field class="head">
         <mat-label>Customer Name</mat-label>
         <input matInput formControlName="name" />
         <mat-error *ngIf="productForm.get('name')?.hasError('required')">Customer Name is required</mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="head">
         <mat-label>Customer Mobile</mat-label>
         <input matInput formControlName="mobile" />
         <mat-error *ngIf="productForm.get('mobile')?.hasError('required')">Customer Mobile is required</mat-error>
       </mat-form-field>
-      <mat-form-field>
+      <mat-form-field class="head">
         <mat-label>Description</mat-label>
         <input matInput formControlName="description" />
       </mat-form-field>
@@ -28,8 +28,8 @@
   <hr>
   
       <!-- Items FormArray -->
-      <div formArrayName="items">
-        <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row">
+      <div formArrayName="items" >
+        <div *ngFor="let item of items.controls; let i = index" [formGroupName]="i" class="item-row"><h4>{{i+1 }}</h4>
           <mat-form-field>
             <mat-label>Item Name</mat-label>
             <input matInput formControlName="name" />
@@ -48,7 +48,7 @@
   
           <mat-form-field>
             <mat-label>Price</mat-label>
-            <input matInput type="number" formControlName="price" (input)="updateTotal(i)" />
+            <input matInput type="number" formControlName="price" (input)="updateTotal(i)" autofocus/>
           </mat-form-field>
   
           <mat-form-field>
@@ -70,6 +70,7 @@
       <button mat-raised-button color="primary" type="button" (click)="addItem()">Add Item</button>
   
       <button mat-raised-button color="accent" (click)="onSubmit()" type="submit" [disabled]="productForm.invalid">Submit</button>
+     
     </form>
   
     <!-- <pre>{{ productForm.value | json }}</pre> -->

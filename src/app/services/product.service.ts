@@ -8,7 +8,7 @@ import { ErrorLogsService } from './error-logs.service';
 })
 export class ProductService {
 
-  private apiUrl = 'http://localhost:3000/products';
+  private apiUrl = 'http://localhost:3000/invoices';
   http = inject(HttpClient);
   logService = inject(ErrorLogsService)
 

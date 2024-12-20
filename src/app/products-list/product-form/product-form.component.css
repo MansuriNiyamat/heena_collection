@@ -4,15 +4,31 @@
 }
 
 mat-form-field {
-  width: 32.5%;
+  width: 30%;
  
+}
+.sp{
+  margin-left: 150px;
 }
 
 .item-row {
  
   display: flex;
   align-items: center;
+
 }
+
+.item-row:active {
+    background-color: antiquewhite;
+    font-size: 22px;
+}
+
+.item-row:hover {
+  background-color: antiquewhite;
+  font-size: 22px;
+}
+
+
 
 button {
   margin-top: 20px;
@@ -20,4 +36,8 @@ button {
 
 button mat-icon {
   margin-right: 8px;
+}
+
+.head{
+  margin: 15px;
 }
