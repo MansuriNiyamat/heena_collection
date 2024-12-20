@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormArray,
@@ -19,6 +19,14 @@ import {MatInputModule} from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { ErrorLogsService } from '../../services/error-logs.service';
 import { timeout } from 'rxjs';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogModule} from '@angular/material/dialog';
+
+
+import { Inject } from '@angular/core';
+import { DialogContentExampleDialog } from './dialog.content.component';
+
+
+
 @Component({
   selector: 'app-product-form',
   standalone: true,
@@ -39,6 +47,7 @@ export class ProductFormComponent {
   total = 0;
   qty = 0;
   info = "";
+  readonly dialog = inject(MatDialog);
   constructor(private fb: FormBuilder) {
   
   }
@@ -182,30 +191,32 @@ this.info = `Total: ${Math.floor(grandTotal)}  /  Saving: ${Math.floor(totalSavi
         saving: this.saving,
         grandTotal: this.total,
         items: prod.items,
-        mobile:prod.mobile
-
+        mobile:prod.mobile,
+        qty:this.qty
       }
 
     if (this.isEdit && this.productId) {
       data.id = this.productId;
       data.modified = new Date;
-      this.productService
-        .updateProduct(this.productId, data)
-        .subscribe(() => {
-        this.log.openSnackBar('Bill Updated Sucessfully.')
+      this.openDialog(data);
+      // this.productService
+      //   .updateProduct(this.productId, data)
+      //   .subscribe(() => {
+      //   this.log.openSnackBar('Bill Updated Sucessfully.')
           
-          this.router.navigate(['/create']);
-        });
+      //     this.router.navigate(['/create']);
+      //   });
     } else {
       data.created = new Date;
       data.modified = new Date;
-      this.productService
-        .createProduct(data)
-        .subscribe(() => {
-        this.log.openSnackBar('Bill created Sucessfully.')
-        this.reset()
-         // this.router.navigate(['/']);
-        });
+      this.openDialog(data);
+      // this.productService
+      //   .createProduct(data)
+      //   .subscribe(() => {
+      //   this.log.openSnackBar('Bill created Sucessfully.')
+      //   this.reset()
+      //    // this.router.navigate(['/']);
+      //   });
     }
   }
   checkError(formControl: AbstractControl): string {
@@ -220,4 +231,81 @@ this.info = `Total: ${Math.floor(grandTotal)}  /  Saving: ${Math.floor(totalSavi
   }
     return ''
   }
+
+
+
+  openDialog(invoice:any) {
+ 
+  
+    const dialogRef = this.dialog.open(DialogContentExampleDialog, {
+      // width: '330px',
+      // height: '400px',
+      data: invoice
+    }
+    );
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(`Dialog result: ${result}`);
+    });
+  }
+
+
+
+   
+    calculateDiscount(price: number, discount: number): number {
+      return (price * discount) / 100;
+    }
+  
+    printInvoice() {
+      const printContent = document.getElementById('invoice')?.innerHTML;
+      const printWindow = window.open('', '_blank');
+      if (printWindow && printContent) {
+        printWindow.document.open();
+        printWindow.document.write(`
+          <html>
+            <head>
+              <title>Invoice</title>
+              <style>
+                body {
+                  font-family: Arial, sans-serif;
+                  font-size: 12px;
+                  margin: 0;
+                  padding: 0;
+                }
+                .invoice {
+                  width: 3in;
+                  margin: auto;
+                  text-align: left;
+                }
+                h1, p {
+                  text-align: center;
+                  margin: 0;
+                }
+                table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  margin: 10px 0;
+                }
+                th, td {
+                  border: 1px solid #ddd;
+                  text-align: left;
+                  padding: 5px;
+                  font-size: 12px;
+                }
+                th {
+                  background-color: #f4f4f4;
+                }
+                .center {
+                  text-align: center;
+                }
+              </style>
+            </head>
+            <body onload="window.print(); window.close();">
+              ${printContent}
+            </body>
+          </html>
+        `);
+        printWindow.document.close();
+      }
+    }
 }

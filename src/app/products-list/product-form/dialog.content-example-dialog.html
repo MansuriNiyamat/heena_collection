@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>Heena Collection</h2>
+<mat-dialog-content class="mat-typography">
+  
+  
+
+  <div id="invoice" class="invoice">
+    <p class="heena">Heena </p>
+      <p class="collection">Collection</p>
+      <p class="punch">Designs that completes you !!!</p>
+    <p class="address">BAG E MASHIRA-1, TP-85,  100FT ROAD, OPP. AMBER TOWER, SARKHEJ, AHMEDABAD-380055.</p>
+    <p class="mo">Mo.: 9979760713</p>
+  
+    <hr />
+  
+    <p class="info"><strong>Invoice No:</strong> {{ data.id }}</p>
+    <p class="info"><strong>Date:</strong> {{ data.created | date: 'short' }}</p>
+    <p class="info"><strong>Customer:</strong> {{ data.name }}</p>
+    <p class="info"><strong>Mobile:</strong> {{ data.mobile }}</p>
+  
+    <hr />
+  
+    <table>
+      <thead>
+        <tr>
+          <th>No.</th>
+          <th>Item</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of data.items;let i = index">
+            <td>{{i+1}}</td>
+            <td>{{ item.name }}</td>
+          <td>{{ item.qty }}</td>
+          <td>{{ item.price  }}</td>
+          <!-- <td>{{ calculateDiscount(item.price, item.discount) | currency }}</td> -->
+          <td>{{ item.total  }}</td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <hr />
+    <p class="info"><strong>Qty:</strong> {{ data.qty }}</p>
+    <p class="info"><strong>Subtotal:</strong> {{ data.grandTotal | currency:'INR' }}</p>
+    <p class="info"><strong>Total Savings:</strong> {{ data.saving | currency:'INR' }}</p>
+    <p class="info"><strong>Grand Total:</strong> {{ data.grandTotal | currency:'INR' }}</p>
+  
+    <hr />
+    <p class="termsHead">Terms & Conditions</p>
+    <p class="terms">1. Goods Once Sold Exchanged Within 2 Days Only</p>
+    <p class="terms">2. No Cash Refund</p>
+    <p class="terms">3. Store Time 11.00 AM to 10.00 PM</p>
+    <p class="terms">4. Friday 04.00 PM to 10.00 PM</p>
+    <hr />
+    <p class="insta">Follow us for Latest Collection</p>
+    <p class="insta">Instagram : &#64;heena_collection_offcial</p>
+    <hr/>
+    <p class="footer">Thank You!</p>
+    <p class="footer">Visit Again for New Styles!</p>
+  
+    
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button  (click)="printInvoice()" [mat-dialog-close]="true" cdkFocusInitial>Print</button>
+</mat-dialog-actions>

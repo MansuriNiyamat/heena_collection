@@ -5,6 +5,7 @@ export interface product {
     saving: number;
     grandTotal: number;
     items: item[];
+    qty:number;
     mobile?:string;
     created?:Date;
     modified?: Date;
