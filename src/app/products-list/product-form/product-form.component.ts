@@ -39,7 +39,7 @@ export class ProductFormComponent {
   total = 0;
   qty = 0;
   info = "";
-  constructor() {
+  constructor(private fb: FormBuilder) {
   
   }
 
@@ -53,17 +53,30 @@ export class ProductFormComponent {
      
       items: new FormArray([]),
     });
-    this.addItem();
+   
     this.activeRoute.paramMap.subscribe((params) => {
       const id = params.get('id');
       if (id) {
         this.isEdit = true;
         this.productId = id;
         this.productService.getProduct(this.productId).subscribe((data: product) => {
+          
+          data.items.forEach((value) => {
+            this.items.push(this.fb.group(value));
+          });
           this.productForm.patchValue(data);
+        this.updateProductTotals();
+
+        }, err => {
+           this.router.navigate(['/create']);
         });
+      } else {
+        this.addItem();
       }
+      this.updateProductTotals();
+
     });
+
   }
   get items() {
     return (this.productForm.get('items') as FormArray);
@@ -83,7 +96,6 @@ export class ProductFormComponent {
     } else {
       return;
     }
-
   }
 
   validateItem(){
@@ -106,7 +118,10 @@ export class ProductFormComponent {
     this.items.removeAt(index);
     this.updateProductTotals();
   }
-
+list(){
+          this.router.navigate(['/']);
+  
+}
   // Update the total for a given item
   updateTotal(index: number) {
     const itemGroup = this.items.at(index) as FormGroup;
@@ -177,9 +192,9 @@ this.info = `Total: ${Math.floor(grandTotal)}  /  Saving: ${Math.floor(totalSavi
       this.productService
         .updateProduct(this.productId, data)
         .subscribe(() => {
-        this.log.openSnackBar('Product Updated Sucessfully.')
-          this.reset()
-         // this.router.navigate(['/']);
+        this.log.openSnackBar('Bill Updated Sucessfully.')
+          
+          this.router.navigate(['/create']);
         });
     } else {
       data.created = new Date;
@@ -187,7 +202,7 @@ this.info = `Total: ${Math.floor(grandTotal)}  /  Saving: ${Math.floor(totalSavi
       this.productService
         .createProduct(data)
         .subscribe(() => {
-        this.log.openSnackBar('Product created Sucessfully.')
+        this.log.openSnackBar('Bill created Sucessfully.')
         this.reset()
          // this.router.navigate(['/']);
         });

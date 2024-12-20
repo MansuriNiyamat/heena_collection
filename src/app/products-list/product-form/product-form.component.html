@@ -1,6 +1,7 @@
 
   <h3>
-    {{ isEdit ? "Edit" : "Create" }} Invoice <span class="sp">{{info}}</span>
+    {{ isEdit ? "Edit" : "Create" }} Invoice <span class="sp">{{info}}</span> 
+   
   </h3>
   <h3>
     
@@ -71,6 +72,7 @@
   
       <button mat-raised-button color="accent" (click)="onSubmit()" type="submit" [disabled]="productForm.invalid">Submit</button>
      
+      <button mat-flat-button color="primary" type="button" (click)="list()">List</button>
     </form>
   
     <!-- <pre>{{ productForm.value | json }}</pre> -->

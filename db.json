@@ -1,25 +1,4 @@
 {
-  "invoices": [
-    {
-      "id": "1",
-      "name": "Niyamat",
-      "description": "",
-      "saving": 258,
-      "grandTotal": 1032,
-      "items": [
-        {
-          "name": "Suit",
-          "qty": 1,
-          "size": "",
-          "price": 1290,
-          "discount": 20,
-          "total": 1032
-        }
-      ],
-      "mobile": "9909845530",
-      "created": "2024-12-20T06:56:36.845Z",
-      "modified": "2024-12-20T06:56:36.845Z"
-    }
-  ],
+  "invoices": [],
   "errors": []
 }
